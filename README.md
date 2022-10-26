@@ -1,10 +1,8 @@
-# vigenesia
+# ViGeNesia
 
-A new Flutter project.
+## Multiplatform application for students and by students!
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
+This is a flutter project for a Web Service Techonology.
 
 A few resources to get you started if this is your first Flutter project:
 
