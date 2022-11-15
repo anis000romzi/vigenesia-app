@@ -18,6 +18,8 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   String nama;
   String idUser;
+  bool _passwordVisible;
+
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   Future<LoginModels> postLogin(String email, String password) async {
     var dio = Dio();
@@ -36,6 +38,12 @@ class LoginState extends State<Login> {
       print('Failed To Load $e');
     }
     return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordVisible = false;
   }
 
   TextEditingController emailController = TextEditingController();
@@ -67,23 +75,43 @@ class LoginState extends State<Login> {
                           FormBuilderTextField(
                             name: 'email',
                             controller: emailController,
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(left: 10),
-                                border: OutlineInputBorder(),
-                                labelText: 'Email'),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              filled: true,
+                              hintText: "Email",
+                              fillColor: Colors.white70,
+                              hintStyle: TextStyle(color: Colors.grey[800]),
+                            ),
                           ),
                           const SizedBox(
                             height: 20,
                           ),
                           FormBuilderTextField(
-                            obscureText:
-                                true, // <--Buat bikin setiap inputan jadi bintang ' * '
+                            obscureText: !_passwordVisible,
                             name: 'password',
                             controller: passwordController,
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(left: 10),
-                                border: OutlineInputBorder(),
-                                labelText: 'Password'),
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _passwordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _passwordVisible = !_passwordVisible;
+                                    });
+                                  }),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              filled: true,
+                              hintText: "Password",
+                              fillColor: Colors.white70,
+                              hintStyle: TextStyle(color: Colors.grey[800]),
+                            ),
                           ),
                           const SizedBox(
                             height: 30,
@@ -154,6 +182,11 @@ class LoginState extends State<Login> {
                                               }
                                           });
                                 },
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 0.0,
+                                    shadowColor: Colors.transparent,
+                                    padding: const EdgeInsets.all(24),
+                                    shape: const StadiumBorder()),
                                 child: const Text('Sign In')),
                           ),
                         ],

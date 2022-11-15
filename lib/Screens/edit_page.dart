@@ -100,6 +100,7 @@ class EditPageState extends State<EditPage> {
                 style: ElevatedButton.styleFrom(
                     elevation: 0.0,
                     shadowColor: Colors.transparent,
+                    padding: const EdgeInsets.all(24),
                     shape: const StadiumBorder()),
                 child: const Text('Submit'),
               )

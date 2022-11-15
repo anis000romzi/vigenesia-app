@@ -4,7 +4,7 @@ import 'edit_page.dart';
 import 'motivasi_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+// import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'login.dart';
 import 'package:vigenesia/Constant/const.dart';
 import 'package:another_flushbar/flushbar.dart';
@@ -22,25 +22,6 @@ class MainScreensState extends State<MainScreens> {
   String baseurl = url;
   String id;
   var dio = Dio();
-  // List<MotivasiModel> ass = [];
-  // TextEditingController titleController = TextEditingController();
-  // Future sendMotivasi(String isi) async {
-  //   dynamic body = {
-  //     'isi_motivasi': isi,
-  //   };
-  //   try {
-  //     final response = await dio.post(
-  //         '$baseurl/vigenesia/api/motivations/${widget.idUser}',
-  //         data: body,
-  //         options: Options(headers: {
-  //           'Content-type': 'application/json'
-  //         })); // Formatnya Harus Form Data
-  //     print('Respon -> ${response.data} + ${response.statusCode}');
-  //     return response;
-  //   } catch (e) {
-  //     print('Error di -> $e');
-  //   }
-  // }
 
   List<MotivasiModel> listproduk = [];
   Future<List<MotivasiModel>> getData() async {
@@ -91,7 +72,6 @@ class MainScreensState extends State<MainScreens> {
     });
   }
 
-  TextEditingController isiController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -105,7 +85,7 @@ class MainScreensState extends State<MainScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(
@@ -143,7 +123,7 @@ class MainScreensState extends State<MainScreens> {
                             style: const TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.w500),
                           ),
-                          TextButton(
+                          OutlinedButton(
                             onPressed: () {
                               Navigator.pop(context);
                               Navigator.push(
@@ -159,24 +139,6 @@ class MainScreensState extends State<MainScreens> {
                             child: const Icon(Icons.logout_sharp),
                           )
                         ],
-                      ),
-                      const SizedBox(height: 20),
-                      FormBuilderTextField(
-                        controller: isiController,
-                        name: 'Cari Motivasi',
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.search_sharp),
-                            onPressed: () {},
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          filled: true,
-                          hintText: "Cari Motivasi",
-                          fillColor: Colors.white70,
-                          hintStyle: TextStyle(color: Colors.grey[800]),
-                        ),
                       ),
                       const SizedBox(height: 10),
                       CustomRadioButton(
@@ -256,7 +218,14 @@ class MainScreensState extends State<MainScreens> {
                                                         ),
                                                       )),
                                                   Text(
-                                                    '${item.nama} - ${item.tanggalInput}\n diubah: ${item.tanggalUpdate}',
+                                                    '${item.nama} - ${item.tanggalInput}',
+                                                    style: const TextStyle(
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                        color: Colors.grey),
+                                                  ),
+                                                  Text(
+                                                    'diubah: ${item.tanggalUpdate}',
                                                     style: const TextStyle(
                                                         fontStyle:
                                                             FontStyle.italic,
@@ -319,12 +288,19 @@ class MainScreensState extends State<MainScreens> {
                                                         fontSize: 15,
                                                       ),
                                                     )),
+                                                Text(
+                                                  '${item.tanggalInput}',
+                                                  style: const TextStyle(
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      color: Colors.grey),
+                                                ),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
                                                           bottom: 10),
                                                   child: Text(
-                                                    '${item.tanggalInput}\n diubah: ${item.tanggalUpdate}',
+                                                    'diubah: ${item.tanggalUpdate}',
                                                     style: const TextStyle(
                                                         fontStyle:
                                                             FontStyle.italic,
