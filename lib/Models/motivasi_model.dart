@@ -21,7 +21,7 @@ class MotivasiModel {
   String isiMotivasi;
   String idUser;
   // String idKategori;
-  DateTime tanggalInput;
+  String tanggalInput;
   String tanggalUpdate;
   String nama;
   String judul;
