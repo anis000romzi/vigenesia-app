@@ -134,7 +134,7 @@ class MainScreensState extends State<MainScreens> {
                             },
                             style: OutlinedButton.styleFrom(
                               shape: const CircleBorder(),
-                              padding: const EdgeInsets.all(24),
+                              padding: const EdgeInsets.all(20),
                             ),
                             child: const Icon(Icons.logout_sharp),
                           )
@@ -245,159 +245,175 @@ class MainScreensState extends State<MainScreens> {
                                   return const CircularProgressIndicator();
                                 }
                               })
-                          : Container(),
-                      trigger == "MOTIVASI_KAMU"
-                          ? FutureBuilder(
-                              future: getData(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<List<MotivasiModel>> snapshot) {
-                                if (snapshot.hasData) {
-                                  return Column(
-                                    children: [
-                                      for (var item in snapshot.data)
-                                        Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          padding: const EdgeInsets.only(
-                                              right: 10, top: 20, left: 10),
-                                          decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    width: 1,
-                                                    color: Colors.grey)),
-                                          ),
-                                          child: ListView(
-                                            shrinkWrap: true,
-                                            children: [
-                                              Column(children: [
-                                                Text(
-                                                  item.judul,
-                                                  style: const TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 10),
-                                                    child: Text(
-                                                      item.isiMotivasi,
+                          : trigger == "MOTIVASI_KAMU"
+                              ? FutureBuilder(
+                                  future: getData(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<MotivasiModel>>
+                                          snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Column(
+                                        children: [
+                                          for (var item in snapshot.data)
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              padding: const EdgeInsets.only(
+                                                  right: 10, top: 20, left: 10),
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border(
+                                                    bottom: BorderSide(
+                                                        width: 1,
+                                                        color: Colors.grey)),
+                                              ),
+                                              child: ListView(
+                                                shrinkWrap: true,
+                                                children: [
+                                                  Column(children: [
+                                                    Text(
+                                                      item.judul,
                                                       style: const TextStyle(
-                                                        fontSize: 15,
-                                                      ),
-                                                    )),
-                                                Text(
-                                                  '${item.tanggalInput}',
-                                                  style: const TextStyle(
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      color: Colors.grey),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 10),
-                                                  child: Text(
-                                                    'diubah: ${item.tanggalUpdate}',
-                                                    style: const TextStyle(
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                        color: Colors.grey),
-                                                  ),
-                                                ),
-                                                DecoratedBox(
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.white,
-                                                      border: Border(
-                                                          top: BorderSide(
-                                                              width: 1,
-                                                              color:
-                                                                  Colors.grey)),
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                     ),
-                                                    child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          TextButton.icon(
-                                                            label: const Text(
-                                                                'Edit',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black)),
-                                                            icon: const Icon(
-                                                                Icons
-                                                                    .drive_file_rename_outline_sharp,
-                                                                color: Colors
-                                                                    .black),
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                    builder: (BuildContext context) => EditPage(
-                                                                        id: item
-                                                                            .id,
-                                                                        isiMotivasi:
-                                                                            item
-                                                                                .isiMotivasi,
-                                                                        judul: item
-                                                                            .judul),
-                                                                  ));
-                                                            },
+                                                    Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                bottom: 10),
+                                                        child: Text(
+                                                          item.isiMotivasi,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 15,
                                                           ),
-                                                          TextButton.icon(
-                                                            label: const Text(
-                                                                'Hapus',
-                                                                style: TextStyle(
+                                                        )),
+                                                    Text(
+                                                      '${item.tanggalInput}',
+                                                      style: const TextStyle(
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          color: Colors.grey),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              bottom: 10),
+                                                      child: Text(
+                                                        'diubah: ${item.tanggalUpdate}',
+                                                        style: const TextStyle(
+                                                            fontStyle: FontStyle
+                                                                .italic,
+                                                            color: Colors.grey),
+                                                      ),
+                                                    ),
+                                                    DecoratedBox(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color: Colors.white,
+                                                          border: Border(
+                                                              top: BorderSide(
+                                                                  width: 1,
+                                                                  color: Colors
+                                                                      .grey)),
+                                                        ),
+                                                        child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              TextButton.icon(
+                                                                label: const Text(
+                                                                    'Edit',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .black)),
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .drive_file_rename_outline_sharp,
                                                                     color: Colors
-                                                                        .black)),
-                                                            icon: const Icon(
-                                                                Icons
-                                                                    .delete_outline_sharp,
-                                                                color: Colors
-                                                                    .black),
-                                                            onPressed:
-                                                                () async {
-                                                              await deletePost(
-                                                                      item.id)
-                                                                  .then(
-                                                                      (value) =>
-                                                                          {
-                                                                            if (value !=
-                                                                                null)
+                                                                        .black),
+                                                                onPressed: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder: (BuildContext context) => EditPage(
+                                                                            id: item
+                                                                                .id,
+                                                                            isiMotivasi:
+                                                                                item.isiMotivasi,
+                                                                            judul: item.judul),
+                                                                      ));
+                                                                },
+                                                              ),
+                                                              TextButton.icon(
+                                                                label: const Text(
+                                                                    'Hapus',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .black)),
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .delete_outline_sharp,
+                                                                    color: Colors
+                                                                        .black),
+                                                                onPressed:
+                                                                    () async {
+                                                                  await deletePost(
+                                                                          item
+                                                                              .id)
+                                                                      .then(
+                                                                          (value) =>
                                                                               {
-                                                                                Flushbar(
-                                                                                  message: 'Berhasil Delete',
-                                                                                  duration: const Duration(seconds: 2),
-                                                                                  backgroundColor: Colors.redAccent,
-                                                                                  flushbarPosition: FlushbarPosition.TOP,
-                                                                                ).show(context)
-                                                                              }
-                                                                          });
-                                                              _getData();
-                                                            },
-                                                          )
-                                                        ])),
-                                              ]),
-                                            ],
-                                          ),
-                                        ),
-                                    ],
-                                  );
-                                } else if (snapshot.hasData &&
-                                    snapshot.data.isEmpty) {
-                                  return const Text('No Data');
-                                } else {
-                                  return const CircularProgressIndicator();
-                                }
-                              })
-                          : Container(),
+                                                                                if (value != null)
+                                                                                  {
+                                                                                    Flushbar(
+                                                                                      message: 'Berhasil Delete',
+                                                                                      duration: const Duration(seconds: 2),
+                                                                                      backgroundColor: Colors.redAccent,
+                                                                                      flushbarPosition: FlushbarPosition.TOP,
+                                                                                    ).show(context)
+                                                                                  }
+                                                                              });
+                                                                  _getData();
+                                                                },
+                                                              )
+                                                            ])),
+                                                  ]),
+                                                ],
+                                              ),
+                                            ),
+                                        ],
+                                      );
+                                    } else if (snapshot.hasData &&
+                                        snapshot.data.isEmpty) {
+                                      return const Text('No Data');
+                                    } else {
+                                      return const CircularProgressIndicator();
+                                    }
+                                  })
+                              : SizedBox(
+                                  height: MediaQuery.of(context).size.height,
+                                  child: Column(children: [
+                                    Image.asset(
+                                      'assets/main-screen.png',
+                                      fit: BoxFit.contain,
+                                      height: 250.0,
+                                      width: 250.0,
+                                    ),
+                                    const Text(
+                                      '"Just one small positive thought in the morning can change your whole day"\n -Dalai Lama',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ])),
                     ]),
               ),
             ),

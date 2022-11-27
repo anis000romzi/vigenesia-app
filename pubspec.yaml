@@ -38,11 +38,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   dio: ^3.0.10
   font_awesome_flutter: ^8.10.2
-  flutter_svg: 0.18.1
-  flutter_form_builder: ^5.0.0
+  flutter_svg: ^1.1.6
+  flutter_form_builder: ^7.7.0
   http: ^0.12.1
   another_flushbar: ^1.10.13
   custom_radio_grouped_button: any
+  flutter_native_splash: ^2.2.15
+  image: ^3.2.2
 
 dependency_overrides:
   flutter_chips_input: ^2.0.0-dev.1
@@ -51,6 +53,13 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/vigenesia-logo.png
+  android: true
+  ios: true
+  web: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -72,9 +81,12 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/vigenesia-logo.png
+    - assets/login-area.png
+    - assets/main-screen.png
+    - assets/sign-in.png
+    # - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -57,12 +57,11 @@ class EditPageState extends State<EditPage> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   filled: true,
-                  hintText: "Judul",
+                  labelText: "Judul",
                   fillColor: Colors.white70,
-                  hintStyle: TextStyle(
+                  labelStyle: const TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800]),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 10),

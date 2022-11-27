@@ -59,54 +59,63 @@ class RegisterState extends State<Register> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Image.asset(
+                    'assets/sign-in.png',
+                    fit: BoxFit.contain,
+                    height: 180.0,
+                    width: 220.0,
+                  ),
                   const Text(
                     'Register Your Account',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
                   ),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 20),
                   FormBuilderTextField(
                     name: 'name',
                     controller: nameController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
                       filled: true,
-                      hintText: "Nama",
+                      labelText: "Nama",
                       fillColor: Colors.white70,
-                      hintStyle: TextStyle(color: Colors.grey[800]),
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(10),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   FormBuilderTextField(
                     name: 'profesi',
                     controller: profesiController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
                       filled: true,
-                      hintText: "Profesi",
+                      labelText: "Profesi",
                       fillColor: Colors.white70,
-                      hintStyle: TextStyle(color: Colors.grey[800]),
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(10),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   FormBuilderTextField(
                     name: 'email',
                     controller: emailController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
                       filled: true,
-                      hintText: "Email",
+                      labelText: "Email",
                       fillColor: Colors.white70,
-                      hintStyle: TextStyle(color: Colors.grey[800]),
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(10),
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   FormBuilderTextField(
                     obscureText: !_passwordVisible,
@@ -128,13 +137,14 @@ class RegisterState extends State<Register> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       filled: true,
-                      hintText: "Password",
+                      labelText: "Password",
                       fillColor: Colors.white70,
-                      hintStyle: TextStyle(color: Colors.grey[800]),
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(8),
                     ),
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
@@ -176,7 +186,7 @@ class RegisterState extends State<Register> {
                         style: ElevatedButton.styleFrom(
                             elevation: 0.0,
                             shadowColor: Colors.transparent,
-                            padding: const EdgeInsets.all(24),
+                            padding: const EdgeInsets.all(20),
                             shape: const StadiumBorder()),
                         child: const Text('Daftar')),
                   ),

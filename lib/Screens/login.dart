@@ -60,11 +60,17 @@ class LoginState extends State<Login> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Image.asset(
+                  'assets/login-area.png',
+                  fit: BoxFit.contain,
+                  height: 180.0,
+                  width: 220.0,
+                ),
                 const Text(
                   'Login Area',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
                 ),
-                const SizedBox(height: 50), // <-- Kasih Jarak Tinggi : 50px
+                const SizedBox(height: 20), // <-- Kasih Jarak Tinggi : 50px
                 Center(
                   child: Form(
                     key: _fbKey,
@@ -80,9 +86,8 @@ class LoginState extends State<Login> {
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               filled: true,
-                              hintText: "Email",
+                              labelText: "Email",
                               fillColor: Colors.white70,
-                              hintStyle: TextStyle(color: Colors.grey[800]),
                             ),
                           ),
                           const SizedBox(
@@ -108,9 +113,8 @@ class LoginState extends State<Login> {
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               filled: true,
-                              hintText: "Password",
+                              labelText: "Password",
                               fillColor: Colors.white70,
-                              hintStyle: TextStyle(color: Colors.grey[800]),
                             ),
                           ),
                           const SizedBox(
@@ -142,7 +146,7 @@ class LoginState extends State<Login> {
                             ),
                           ),
                           const SizedBox(
-                            height: 40,
+                            height: 20,
                           ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
@@ -185,7 +189,7 @@ class LoginState extends State<Login> {
                                 style: ElevatedButton.styleFrom(
                                     elevation: 0.0,
                                     shadowColor: Colors.transparent,
-                                    padding: const EdgeInsets.all(24),
+                                    padding: const EdgeInsets.all(20),
                                     shape: const StadiumBorder()),
                                 child: const Text('Sign In')),
                           ),
