@@ -48,6 +48,7 @@ class LoginState extends State<Login> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController urlApiController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,6 +194,32 @@ class LoginState extends State<Login> {
                                     shape: const StadiumBorder()),
                                 child: const Text('Sign In')),
                           ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          FormBuilderTextField(
+                            name: 'url_api',
+                            controller: urlApiController,
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  icon: Icon(Icons.send),
+                                  onPressed: () {
+                                    setState(() {
+                                      url = urlApiController.text;
+                                      print(url);
+                                    });
+                                  }),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              filled: true,
+                              labelText: "insert URL API here",
+                              fillColor: Colors.white70,
+                              isDense: true,
+                              contentPadding: EdgeInsets.all(10),
+                            ),
+                          ),
+                          Text(url),
                         ],
                       ),
                     ),
