@@ -18,6 +18,8 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   String nama;
   String idUser;
+  bool _passwordVisible;
+
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   Future<LoginModels> postLogin(String email, String password) async {
     var dio = Dio();
@@ -38,8 +40,15 @@ class LoginState extends State<Login> {
     return null;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _passwordVisible = false;
+  }
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController urlApiController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,11 +61,17 @@ class LoginState extends State<Login> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Image.asset(
+                  'assets/login-area.png',
+                  fit: BoxFit.contain,
+                  height: 180.0,
+                  width: 220.0,
+                ),
                 const Text(
                   'Login Area',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
                 ),
-                const SizedBox(height: 50), // <-- Kasih Jarak Tinggi : 50px
+                const SizedBox(height: 20), // <-- Kasih Jarak Tinggi : 50px
                 Center(
                   child: Form(
                     key: _fbKey,
@@ -67,23 +82,41 @@ class LoginState extends State<Login> {
                           FormBuilderTextField(
                             name: 'email',
                             controller: emailController,
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(left: 10),
-                                border: OutlineInputBorder(),
-                                labelText: 'Email'),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              filled: true,
+                              labelText: "Email",
+                              fillColor: Colors.white70,
+                            ),
                           ),
                           const SizedBox(
                             height: 20,
                           ),
                           FormBuilderTextField(
-                            obscureText:
-                                true, // <--Buat bikin setiap inputan jadi bintang ' * '
+                            obscureText: !_passwordVisible,
                             name: 'password',
                             controller: passwordController,
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(left: 10),
-                                border: OutlineInputBorder(),
-                                labelText: 'Password'),
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _passwordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _passwordVisible = !_passwordVisible;
+                                    });
+                                  }),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              filled: true,
+                              labelText: "Password",
+                              fillColor: Colors.white70,
+                            ),
                           ),
                           const SizedBox(
                             height: 30,
@@ -114,7 +147,7 @@ class LoginState extends State<Login> {
                             ),
                           ),
                           const SizedBox(
-                            height: 40,
+                            height: 20,
                           ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
@@ -154,8 +187,39 @@ class LoginState extends State<Login> {
                                               }
                                           });
                                 },
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 0.0,
+                                    shadowColor: Colors.transparent,
+                                    padding: const EdgeInsets.all(20),
+                                    shape: const StadiumBorder()),
                                 child: const Text('Sign In')),
                           ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          FormBuilderTextField(
+                            name: 'url_api',
+                            controller: urlApiController,
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  icon: Icon(Icons.send),
+                                  onPressed: () {
+                                    setState(() {
+                                      url = urlApiController.text;
+                                      print(url);
+                                    });
+                                  }),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              filled: true,
+                              labelText: "insert URL API here",
+                              fillColor: Colors.white70,
+                              isDense: true,
+                              contentPadding: EdgeInsets.all(10),
+                            ),
+                          ),
+                          Text(url),
                         ],
                       ),
                     ),

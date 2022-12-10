@@ -1,12 +1,14 @@
-import 'dart:convert';
+// import 'dart:convert';
 import 'package:vigenesia/Models/motivasi_model.dart';
 import 'edit_page.dart';
+import 'motivasi_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+// import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'login.dart';
 import 'package:vigenesia/Constant/const.dart';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 
 class MainScreens extends StatefulWidget {
   final String idUser;
@@ -20,26 +22,6 @@ class MainScreensState extends State<MainScreens> {
   String baseurl = url;
   String id;
   var dio = Dio();
-  List<MotivasiModel> ass = [];
-  TextEditingController titleController = TextEditingController();
-  Future sendMotivasi(String isi) async {
-    dynamic body = {
-      'isi_motivasi': isi,
-      // 'iduser': widget.idUser
-    }; // [Tambah IDUSER -> Widget.iduser]
-    try {
-      final response = await dio.post(
-          '$baseurl/vigenesia/api/motivations/${widget.idUser}',
-          data: body,
-          options: Options(headers: {
-            'Content-type': 'application/json'
-          })); // Formatnya Harus Form Data
-      print('Respon -> ${response.data} + ${response.statusCode}');
-      return response;
-    } catch (e) {
-      print('Error di -> $e');
-    }
-  }
 
   List<MotivasiModel> listproduk = [];
   Future<List<MotivasiModel>> getData() async {
@@ -57,17 +39,14 @@ class MainScreensState extends State<MainScreens> {
   }
 
   Future<dynamic> deletePost(String id) async {
-    dynamic data = {
-      'id': id,
-    };
-    var response = await dio.delete('$baseurl/vigenesia/api/dev/DELETEmotivasi',
-        data: data,
-        options: Options(
-            contentType: Headers.formUrlEncodedContentType,
-            headers: {'Content-type': 'application/json'}));
-    print(' ${response.data}');
-    var resbody = jsonDecode(response.data);
-    return resbody;
+    try {
+      final response =
+          await dio.delete('$baseurl/vigenesia/api/motivations/$id');
+      print(' ${response.data}');
+      return response;
+    } catch (e) {
+      print('Error di -> $e');
+    }
   }
 
   Future<List<MotivasiModel>> getData2() async {
@@ -85,6 +64,7 @@ class MainScreensState extends State<MainScreens> {
   }
 
   Future<void> _getData() async {
+    // ignore: void_checks
     setState(() {
       getData();
       listproduk.clear();
@@ -92,7 +72,6 @@ class MainScreensState extends State<MainScreens> {
     });
   }
 
-  TextEditingController isiController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -106,203 +85,339 @@ class MainScreensState extends State<MainScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        // <-- Berfungsi Untuk Bisa Scroll
-        child: SafeArea(
-          // < -- Biar Gak Keluar Area Screen HP
-          child: Padding(
-            padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment
-                    .center, // <-- Berfungsi untuk atur nilai X jadi tengah
-                children: [
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Hallo ${widget.nama}',
-                        style: const TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.w500),
-                      ),
-                      TextButton(
-                          child: const Icon(Icons.logout),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        const Login()));
-                          })
-                    ],
-                  ),
-                  const SizedBox(height: 20), // <-- Kasih Jarak Tinggi : 50px
-                  FormBuilderTextField(
-                    controller: isiController,
-                    name: 'isiMotivasi',
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.only(left: 10),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          await sendMotivasi(
-                            isiController.text,
-                          ).then((value) => {
-                                if (value != null)
-                                  {
-                                    Flushbar(
-                                      message: 'Berhasil Submit',
-                                      duration: const Duration(seconds: 2),
-                                      backgroundColor: Colors.greenAccent,
-                                      flushbarPosition: FlushbarPosition.TOP,
-                                    ).show(context)
-                                  }
-                              });
-                          _getData();
-                          print('Sukses');
-                        },
-                        child: const Text('Submit')),
-                  ),
-                  TextButton(
-                    child: const Icon(Icons.refresh),
-                    onPressed: () {
-                      _getData();
-                    },
-                  ),
-                  FormBuilderRadioGroup(
-                      onChanged: (value) {
-                        setState(() {
-                          trigger = value;
-                          print(' HASILNYA --> $trigger'); // hasil ganti value
-                        });
-                      },
-                      name: '_',
-                      options: ['Motivasi By All', 'Motivasi By User']
-                          .map((e) =>
-                              FormBuilderFieldOption(value: e, child: Text(e)))
-                          .toList()),
-                  trigger == 'Motivasi By All'
-                      ? FutureBuilder(
-                          future: getData2(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<MotivasiModel>> snapshot) {
-                            if (snapshot.hasData) {
-                              return Column(
-                                children: [
-                                  for (var item in snapshot.data)
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: ListView(
-                                        shrinkWrap: true,
-                                        children: [
-                                          Text(item.isiMotivasi),
-                                        ],
-                                      ),
-                                    ),
-                                ],
-                              );
-                            } else if (snapshot.hasData &&
-                                snapshot.data.isEmpty) {
-                              return const Text('No Data');
-                            } else {
-                              return const CircularProgressIndicator();
-                            }
-                          })
-                      : Container(),
-                  trigger == 'Motivasi By User'
-                      ? FutureBuilder(
-                          future: getData(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<MotivasiModel>> snapshot) {
-                            if (snapshot.hasData) {
-                              return Column(
-                                children: [
-                                  for (var item in snapshot.data)
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: ListView(
-                                        shrinkWrap: true,
-                                        children: [
-                                          Card(
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                Text(item.isiMotivasi),
-                                                Row(children: [
-                                                  TextButton(
-                                                    child: const Icon(
-                                                        Icons.settings),
-                                                    onPressed: () {
-                                                      // String id;
-                                                      // String isiMotivasi;
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (BuildContext
-                                                                    context) =>
-                                                                EditPage(
-                                                                    id: item.id,
-                                                                    isiMotivasi:
-                                                                        item.isiMotivasi),
-                                                          ));
-                                                    },
-                                                  ),
-                                                  TextButton(
-                                                    child: const Icon(
-                                                        Icons.delete),
-                                                    onPressed: () {
-                                                      deletePost(item.id)
-                                                          .then((value) => {
-                                                                if (value !=
-                                                                    null)
-                                                                  {
-                                                                    Flushbar(
-                                                                      message:
-                                                                          'Berhasil Delete',
-                                                                      duration: const Duration(
-                                                                          seconds:
-                                                                              2),
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .redAccent,
-                                                                      flushbarPosition:
-                                                                          FlushbarPosition
-                                                                              .TOP,
-                                                                    ).show(
-                                                                        context)
-                                                                  }
-                                                              });
-                                                      _getData();
-                                                    },
-                                                  )
-                                                ]),
-                                              ])),
-                                        ],
-                                      ),
-                                    ),
-                                ],
-                              );
-                            } else if (snapshot.hasData &&
-                                snapshot.data.isEmpty) {
-                              return const Text('No Data');
-                            } else {
-                              return const CircularProgressIndicator();
-                            }
-                          })
-                      : Container(),
-                ]),
-          ),
+        backgroundColor: Colors.white,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      MotivasiPage(idUser: widget.idUser),
+                ));
+          },
+          backgroundColor: Colors.blue,
+          child: const Icon(Icons.history_edu_sharp),
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+          // <-- Berfungsi Untuk Bisa Scroll
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await _getData();
+            },
+            child: SafeArea(
+              // < -- Biar Gak Keluar Area Screen HP
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment
+                        .center, // <-- Berfungsi untuk atur nilai X jadi tengah
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Halo, ${widget.nama} ~',
+                            style: const TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.w500),
+                          ),
+                          OutlinedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          const Login()));
+                            },
+                            style: OutlinedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              padding: const EdgeInsets.all(20),
+                            ),
+                            child: const Icon(Icons.logout_sharp),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      CustomRadioButton(
+                        elevation: 0,
+                        horizontal: false,
+                        autoWidth: true,
+                        padding: 5,
+                        enableButtonWrap: true,
+                        wrapAlignment: WrapAlignment.center,
+                        enableShape: true,
+                        unSelectedColor: Theme.of(context).canvasColor,
+                        buttonLables: const [
+                          'Motivasi',
+                          'Motivasi Kamu',
+                        ],
+                        buttonValues: const [
+                          "MOTIVASI",
+                          "MOTIVASI_KAMU",
+                        ],
+                        buttonTextStyle: const ButtonTextStyle(
+                            selectedColor: Colors.white,
+                            unSelectedColor: Colors.black,
+                            textStyle: TextStyle(fontSize: 16)),
+                        radioButtonValue: (value) {
+                          setState(() {
+                            trigger = value;
+                            print(
+                                ' HASILNYA --> $trigger'); // hasil ganti value
+                          });
+                        },
+                        selectedColor: Theme.of(context).colorScheme.secondary,
+                      ),
+                      trigger == "MOTIVASI"
+                          ? FutureBuilder(
+                              future: getData2(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<MotivasiModel>> snapshot) {
+                                if (snapshot.hasData) {
+                                  return Column(
+                                    children: [
+                                      for (var item in snapshot.data)
+                                        Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          padding: const EdgeInsets.only(
+                                              right: 10,
+                                              top: 20,
+                                              left: 10,
+                                              bottom: 10),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.grey)),
+                                          ),
+                                          child: ListView(
+                                            shrinkWrap: true,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    item.judul,
+                                                    style: const TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              bottom: 10),
+                                                      child: Text(
+                                                        item.isiMotivasi,
+                                                        style: const TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                      )),
+                                                  Text(
+                                                    '${item.nama} - ${item.tanggalInput}',
+                                                    style: const TextStyle(
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                        color: Colors.grey),
+                                                  ),
+                                                  Text(
+                                                    'diubah: ${item.tanggalUpdate}',
+                                                    style: const TextStyle(
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                        color: Colors.grey),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                    ],
+                                  );
+                                } else if (snapshot.hasData &&
+                                    snapshot.data.isEmpty) {
+                                  return const Text('No Data');
+                                } else {
+                                  return const CircularProgressIndicator();
+                                }
+                              })
+                          : trigger == "MOTIVASI_KAMU"
+                              ? FutureBuilder(
+                                  future: getData(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<MotivasiModel>>
+                                          snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Column(
+                                        children: [
+                                          for (var item in snapshot.data)
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              padding: const EdgeInsets.only(
+                                                  right: 10, top: 20, left: 10),
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border(
+                                                    bottom: BorderSide(
+                                                        width: 1,
+                                                        color: Colors.grey)),
+                                              ),
+                                              child: ListView(
+                                                shrinkWrap: true,
+                                                children: [
+                                                  Column(children: [
+                                                    Text(
+                                                      item.judul,
+                                                      style: const TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                bottom: 10),
+                                                        child: Text(
+                                                          item.isiMotivasi,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 15,
+                                                          ),
+                                                        )),
+                                                    Text(
+                                                      '${item.tanggalInput}',
+                                                      style: const TextStyle(
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          color: Colors.grey),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              bottom: 10),
+                                                      child: Text(
+                                                        'diubah: ${item.tanggalUpdate}',
+                                                        style: const TextStyle(
+                                                            fontStyle: FontStyle
+                                                                .italic,
+                                                            color: Colors.grey),
+                                                      ),
+                                                    ),
+                                                    DecoratedBox(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color: Colors.white,
+                                                          border: Border(
+                                                              top: BorderSide(
+                                                                  width: 1,
+                                                                  color: Colors
+                                                                      .grey)),
+                                                        ),
+                                                        child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              TextButton.icon(
+                                                                label: const Text(
+                                                                    'Edit',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .black)),
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .drive_file_rename_outline_sharp,
+                                                                    color: Colors
+                                                                        .black),
+                                                                onPressed: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder: (BuildContext context) => EditPage(
+                                                                            id: item
+                                                                                .id,
+                                                                            isiMotivasi:
+                                                                                item.isiMotivasi,
+                                                                            judul: item.judul),
+                                                                      ));
+                                                                },
+                                                              ),
+                                                              TextButton.icon(
+                                                                label: const Text(
+                                                                    'Hapus',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .black)),
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .delete_outline_sharp,
+                                                                    color: Colors
+                                                                        .black),
+                                                                onPressed:
+                                                                    () async {
+                                                                  await deletePost(
+                                                                          item
+                                                                              .id)
+                                                                      .then(
+                                                                          (value) =>
+                                                                              {
+                                                                                if (value != null)
+                                                                                  {
+                                                                                    Flushbar(
+                                                                                      message: 'Berhasil Delete',
+                                                                                      duration: const Duration(seconds: 2),
+                                                                                      backgroundColor: Colors.redAccent,
+                                                                                      flushbarPosition: FlushbarPosition.TOP,
+                                                                                    ).show(context)
+                                                                                  }
+                                                                              });
+                                                                  _getData();
+                                                                },
+                                                              )
+                                                            ])),
+                                                  ]),
+                                                ],
+                                              ),
+                                            ),
+                                        ],
+                                      );
+                                    } else if (snapshot.hasData &&
+                                        snapshot.data.isEmpty) {
+                                      return const Text('No Data');
+                                    } else {
+                                      return const CircularProgressIndicator();
+                                    }
+                                  })
+                              : SizedBox(
+                                  height: MediaQuery.of(context).size.height,
+                                  child: Column(children: [
+                                    Image.asset(
+                                      'assets/main-screen.png',
+                                      fit: BoxFit.contain,
+                                      height: 250.0,
+                                      width: 250.0,
+                                    ),
+                                    const Text(
+                                      '"Just one small positive thought in the morning can change your whole day"\n -Dalai Lama',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ])),
+                    ]),
+              ),
+            ),
+          ),
+        ));
   }
 }

@@ -1,3 +1,5 @@
+// import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 // import 'dart:convert';
@@ -6,38 +8,40 @@ import 'package:dio/dio.dart';
 import 'package:vigenesia/Constant/const.dart';
 // import 'package:vigenesia/Models/motivasi_model.dart';
 
-class EditPage extends StatefulWidget {
-  final String id;
-  final String isiMotivasi;
-  final String judul;
-  const EditPage({Key key, this.id, this.isiMotivasi, this.judul})
-      : super(key: key);
+class MotivasiPage extends StatefulWidget {
+  final String idUser;
+  const MotivasiPage({Key key, this.idUser}) : super(key: key);
   @override
-  EditPageState createState() => EditPageState();
+  MotivasiPageState createState() => MotivasiPageState();
 }
 
-class EditPageState extends State<EditPage> {
+class MotivasiPageState extends State<MotivasiPage> {
   String baseurl = url;
   var dio = Dio();
-  Future putPost(String isiMotivasi, String judul) async {
-    dynamic data = {'isi_motivasi': isiMotivasi, 'judul': judul};
-    var response =
-        await dio.put('$baseurl/vigenesia/api/motivations/${widget.id}',
-            data: data,
-            options: Options(headers: {
-              'Content-type': 'application/json',
-            }));
-    print('---> ${response.data} + ${response.statusCode}');
-    return response.data;
+  Future sendMotivasi(String isi, String judul) async {
+    dynamic body = {'isi_motivasi': isi, 'judul': judul};
+    try {
+      final response = await dio.post(
+          '$baseurl/vigenesia/api/motivations/${widget.idUser}',
+          data: body,
+          options: Options(headers: {
+            'Content-type': 'application/json'
+          })); // Formatnya Harus Form Data
+      print('Respon -> ${response.data} + ${response.statusCode}');
+      return response;
+    } catch (e) {
+      print('Error di -> $e');
+    }
   }
 
   TextEditingController isiMotivasiC = TextEditingController();
   TextEditingController judulC = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Motivasi'),
+        title: const Text('Motivasi Baru'),
         elevation: 0,
       ),
       body: SafeArea(
@@ -49,7 +53,7 @@ class EditPageState extends State<EditPage> {
             children: [
               FormBuilderTextField(
                 name: 'judul',
-                controller: judulC..text = widget.judul,
+                controller: judulC,
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
@@ -67,7 +71,7 @@ class EditPageState extends State<EditPage> {
               const SizedBox(height: 10),
               FormBuilderTextField(
                 name: 'isi_motivasi',
-                controller: isiMotivasiC..text = widget.isiMotivasi,
+                controller: isiMotivasiC,
                 keyboardType: TextInputType.multiline,
                 maxLines: 15,
                 decoration: InputDecoration(
@@ -77,18 +81,18 @@ class EditPageState extends State<EditPage> {
                   filled: true,
                   hintText: "Isi Motivasi",
                   fillColor: Colors.white70,
-                  hintStyle: TextStyle(color: Colors.grey[800]),
+                  hintStyle: const TextStyle(fontSize: 15, color: Colors.grey),
                 ),
               ),
               const SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () {
-                  putPost(isiMotivasiC.text, judulC.text).then((value) => {
+                  sendMotivasi(isiMotivasiC.text, judulC.text).then((value) => {
                         if (value != null)
                           {
                             Navigator.pop(context),
                             Flushbar(
-                              message: 'Berhasil Update & Refresh dulu',
+                              message: 'Berhasil Tambah Motivasi',
                               duration: const Duration(seconds: 5),
                               backgroundColor: Colors.green,
                               flushbarPosition: FlushbarPosition.TOP,
